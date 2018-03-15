@@ -56,4 +56,22 @@ describe('GitRefManager', () => {
     })
     expect(refs).toMatchSnapshot()
   })
+  it('expands local-tag to refs/tags/local-tag', async () => {
+    let { fs, dir, gitdir } = await makeFixture('test-GitRefManager')
+    let ref = await GitRefManager.expand({
+      fs,
+      gitdir,
+      ref: 'local-tag'
+    })
+    expect(ref).toEqual('refs/tags/local-tag')
+  })
+  it('expands origin/master to refs/remotes/origin/master', async () => {
+    let { fs, dir, gitdir } = await makeFixture('test-GitRefManager')
+    let ref = await GitRefManager.expand({
+      fs,
+      gitdir,
+      ref: 'origin/master'
+    })
+    expect(ref).toEqual('refs/remotes/origin/master')
+  })
 })

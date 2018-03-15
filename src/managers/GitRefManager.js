@@ -101,6 +101,19 @@ export class GitRefManager {
     const normalizeValue = value => value.trim() + '\n'
     await fs.write(path.join(gitdir, ref), normalizeValue(value), 'utf8')
   }
+  static async expand ({ fs: _fs, gitdir, ref }) {
+    const fs = new FileSystem(_fs)
+    // We need to alternate between the file system and the packed-refs
+    let packedMap = await GitRefManager.packedRefs({ fs, gitdir })
+    // Look in all the proper paths, in this order
+    const allpaths = refpaths(ref)
+    for (let ref of allpaths) {
+      if ((await fs.exists(`${gitdir}/${ref}`)) || packedMap.get(ref)) {
+        return ref
+      }
+    }
+    return null
+  }
   static async resolve ({ fs: _fs, gitdir, ref, depth }) {
     const fs = new FileSystem(_fs)
     if (depth !== undefined) {

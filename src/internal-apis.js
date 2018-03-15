@@ -4,6 +4,5 @@ import * as utils from './utils'
 export { managers }
 export { models }
 export { utils }
-export { listCommits } from './commands/push'
-export { listObjects } from './commands/push'
+export { listCommits, listObjects, Packfile } from './models/GitPackfile'
 export { pack } from './commands/push'
