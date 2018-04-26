@@ -6,7 +6,7 @@ module.exports = function (config) {
   const options = {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['FirefoxHeadless'],
+    browsers: [],
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
     // frameworks to use
@@ -93,7 +93,7 @@ module.exports = function (config) {
     },
     sauceLabs: {
       testName: 'isomorphic-git',
-      build: process.env.TRAVIS_JOB_NUMBER + '-' + Date.now(),
+      build: (process.env.TRAVIS_JOB_NUMBER || process.env.CIRCLE_BUILD_NUM) + '-' + Date.now(),
       recordScreenshots: false,
       recordVideo: false,
       public: 'public restricted'
@@ -149,6 +149,7 @@ module.exports = function (config) {
 
   if (!process.env.CI) {
     options.browsers.push('ChromeHeadless')
+    options.browsers.push('FirefoxHeadless')
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     options.singleRun = false
